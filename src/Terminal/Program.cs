@@ -4,7 +4,7 @@ using Akka.Actor;
 using Akka.Cluster;
 using Common;
 
-namespace SeedNode1
+namespace Terminal
 {
     class Program
     {
@@ -12,7 +12,7 @@ namespace SeedNode1
 
         static void Main(string[] args)
         {
-            Console.Title = "ServiceNode";
+            Console.Title = "Terminal";
 
             var port = "";
             if (args != null && args.Length > 0)
@@ -21,8 +21,15 @@ namespace SeedNode1
             }
             var actorSystem = ActorSystemFactory.Create(port);
 
-            actorSystem.ActorOf<ServiceActor>("serviceEntry");
 
+            var terminal = actorSystem.ActorOf<TerminalActor>("terminal");
+            var input = string.Empty;
+            while (input != "quit")
+            {
+                input = Console.ReadLine();
+                terminal.Tell(new BinaryFunctionActor.Arguments { LeftArg = 10, RightArg = 20, Function = "add" });
+                Console.WriteLine($"send");
+            }
             _manualResetEventSlim.Wait();
 
             var cluster = Cluster.Get(actorSystem);

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using Common;
 using Akka.Actor;
-using Akka.Configuration;
 
 namespace Lighthouse
 {
@@ -13,21 +13,14 @@ namespace Lighthouse
         static void Main(string[] args)
         {
             Console.Title = "Lighthouse";
-            #region Akka config
-
-            Config actorConfig = null;
-            if (File.Exists("akka.conf"))
+            var port = "";
+            if (args != null && args.Length > 0)
             {
-                actorConfig = ConfigurationFactory.ParseString(File.ReadAllText("akka.conf"));
+                port = args[0];
             }
-            else
-            {
-                throw new ConfigurationException("not found akka.conf");
-            }
+            var actorSystem = ActorSystemFactory.Create(port);
 
-            #endregion Akka config
-
-            var actorsystem = ActorSystem.Create("akka-lab", actorConfig);
+            actorSystem.ActorOf<ClusterMoniter>();
 
             //var deadletterWatchMonitorProps = Props.Create(() => new ActorSystemMonitor());
             //var deadletterWatchActorRef = actorsystem.ActorOf(deadletterWatchMonitorProps);
