@@ -8,7 +8,7 @@ namespace akkademy_db
 {
     public class AkkademyDb : ReceiveActor
     {
-        protected Dictionary<string, object> _map = new Dictionary<string, object>();
+        public readonly Dictionary<string, object> Map = new Dictionary<string, object>();
         protected ILoggingAdapter _logger = Context.GetLogger();
 
         public AkkademyDb()
@@ -16,7 +16,7 @@ namespace akkademy_db
             Receive<SetRequest>(msg =>
             {
                 _logger.Info($"Received Set request:{msg}");
-                _map[msg.Key] = msg.Value;
+                Map[msg.Key] = msg.Value;
             });
             ReceiveAny(msg =>
             {
