@@ -16,4 +16,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\akkademy-db\akkademy-db.csproj" />
+  </ItemGroup>
+
 </Project>

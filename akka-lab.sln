@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "akkademy-db", "src\akkademy
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{648EFFA2-4C2B-4448-BC81-3FA8960550BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkademyDbTest", "test\AkkademyDbTest\AkkademyDbTest.csproj", "{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkademyDb.Test", "test\AkkademyDbTest\AkkademyDb.Test.csproj", "{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
