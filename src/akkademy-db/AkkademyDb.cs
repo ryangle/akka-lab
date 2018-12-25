@@ -17,10 +17,24 @@ namespace akkademy_db
             {
                 _logger.Info($"Received Set request:{msg}");
                 Map[msg.Key] = msg.Value;
+                Sender.Tell(new Status.Success(msg.Key));
+            });
+            Receive<GetRequest>(msg =>
+            {
+                _logger.Info($"Received Get request: {msg}");
+                if (Map.ContainsKey(msg.Key))
+                {
+                    Sender.Tell(Map[msg.Key]);
+                }
+                else
+                {
+                    Sender.Tell(new Status.Failure(new KeyNotFoundException(msg.Key)));
+                }
             });
             ReceiveAny(msg =>
             {
                 _logger.Info($"received unknown message: {msg}");
+                Sender.Tell(new Status.Failure(new Exception("unknown message")));
             });
         }
     }
