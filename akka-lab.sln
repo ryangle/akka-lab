@@ -15,11 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terminal", "src\Terminal\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShardingNode", "src\ShardingNode\ShardingNode.csproj", "{C0706131-14A0-4635-A475-84C44E9C243B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "akkademy-db", "src\akkademy-db\akkademy-db.csproj", "{F6A44CAF-4C44-436E-9925-BD7E9C468DBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "akkademy-db", "src\akkademy-db\akkademy-db.csproj", "{F6A44CAF-4C44-436E-9925-BD7E9C468DBC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{648EFFA2-4C2B-4448-BC81-3FA8960550BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkademyDb.Test", "test\AkkademyDbTest\AkkademyDb.Test.csproj", "{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkkademyDb.Test", "test\AkkademyDbTest\AkkademyDb.Test.csproj", "{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkademydbServer", "src\AkkademydbServer\AkkademydbServer.csproj", "{DB380C95-097D-4EA8-8220-AECFAA9E7B9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkademydbClient", "src\AkkademydbClient\AkkademydbClient.csproj", "{D8F2CA21-1E72-4A14-BF84-06862DF90843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +59,14 @@ Global
 		{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40034B87-6AE5-4E83-AFDF-DB7AC38F0092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB380C95-097D-4EA8-8220-AECFAA9E7B9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB380C95-097D-4EA8-8220-AECFAA9E7B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB380C95-097D-4EA8-8220-AECFAA9E7B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB380C95-097D-4EA8-8220-AECFAA9E7B9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8F2CA21-1E72-4A14-BF84-06862DF90843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F2CA21-1E72-4A14-BF84-06862DF90843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8F2CA21-1E72-4A14-BF84-06862DF90843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8F2CA21-1E72-4A14-BF84-06862DF90843}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +79,8 @@ Global
 		{C0706131-14A0-4635-A475-84C44E9C243B} = {084CE6CB-D0E3-4CC8-9B78-5DD5ED6A0660}
 		{F6A44CAF-4C44-436E-9925-BD7E9C468DBC} = {084CE6CB-D0E3-4CC8-9B78-5DD5ED6A0660}
 		{40034B87-6AE5-4E83-AFDF-DB7AC38F0092} = {648EFFA2-4C2B-4448-BC81-3FA8960550BB}
+		{DB380C95-097D-4EA8-8220-AECFAA9E7B9F} = {084CE6CB-D0E3-4CC8-9B78-5DD5ED6A0660}
+		{D8F2CA21-1E72-4A14-BF84-06862DF90843} = {084CE6CB-D0E3-4CC8-9B78-5DD5ED6A0660}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFC48892-2300-4B10-A02F-ACBE5CA9C1BC}

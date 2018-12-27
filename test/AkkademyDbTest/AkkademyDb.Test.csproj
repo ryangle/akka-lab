@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\akkademy-db\akkademy-db.csproj" />
+    <ProjectReference Include="..\..\src\AkkademydbClient\AkkademydbClient.csproj" />
   </ItemGroup>
 
 </Project>
