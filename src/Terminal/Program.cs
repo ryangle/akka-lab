@@ -28,6 +28,12 @@ namespace Terminal
                 while (input != "quit")
                 {
                     input = Console.ReadLine();
+                    if (input != null && input.StartsWith("ref"))
+                    {
+                        terminal.Tell(new RemoteRefActor.Create());
+                        Console.WriteLine($"send RemoteRefActor.Create");
+                        continue;
+                    }
                     terminal.Tell(new BinaryFunctionActor.Arguments
                     {
                         LeftArg = 10,

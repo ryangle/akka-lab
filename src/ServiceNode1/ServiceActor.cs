@@ -20,6 +20,12 @@ namespace SeedNode1
                 }
                 binaryFunction.Forward(msg);
             });
+
+            Receive<RemoteRefActor.Create>(msg =>
+            {
+                var remoteRefActor = Context.ActorOf<RemoteRefActor>();
+                Sender.Tell(new RemoteRefActor.MsgWhithRef(remoteRefActor));
+            });
         }
     }
 }
