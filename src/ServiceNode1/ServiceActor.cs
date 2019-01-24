@@ -26,6 +26,12 @@ namespace SeedNode1
                 var remoteRefActor = Context.ActorOf<RemoteRefActor>();
                 Sender.Tell(new RemoteRefActor.MsgWhithRef(remoteRefActor));
             });
+
+            Receive<RemoteRefActor.RandomNumReq>(msg =>
+            {
+                Console.WriteLine($"Receive RemoteRefActor.RandomNumReq from {msg.Responder}");
+                msg.Responder.Tell("1111");
+            });
         }
     }
 }

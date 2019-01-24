@@ -26,6 +26,10 @@ namespace Terminal
                 Console.WriteLine($"TerminalActor receive MsgWhithRef {msg.Actor.Path}");
                 msg.Actor.Tell("Terminal Actor tell");
             });
+            Receive<RemoteRefActor.GetRandomNum>(msg =>
+            {
+                serviceEntry.Tell(new RemoteRefActor.RandomNumReq(Sender));
+            });
         }
     }
 }

@@ -7,6 +7,15 @@ namespace Common
 {
     public class RemoteRefActor : ReceiveActor
     {
+        public class GetRandomNum { }
+        public class RandomNumReq
+        {
+            public RandomNumReq(IActorRef actor)
+            {
+                Responder = actor;
+            }
+            public IActorRef Responder { get; }
+        }
         public class MsgWhithRef
         {
             public MsgWhithRef(IActorRef actor)
