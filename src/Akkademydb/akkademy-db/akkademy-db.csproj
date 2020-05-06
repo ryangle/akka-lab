@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>akkademy_db</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Akka" Version="1.3.12" />
-    <PackageReference Include="Akka.Remote" Version="1.3.12" />
-    <PackageReference Include="Akka.Cluster" Version="1.3.12" />
-    <PackageReference Include="Akka.Cluster.Tools" Version="1.3.12" />
+    <PackageReference Include="Akka" Version="1.4.5" />
+    <PackageReference Include="Akka.Remote" Version="1.4.5" />
+    <PackageReference Include="Akka.Cluster" Version="1.4.5" />
+    <PackageReference Include="Akka.Cluster.Tools" Version="1.4.5" />
     <PackageReference Include="Akka.Logger.log4net" Version="1.3.1" />
-    <PackageReference Include="Akka.Serialization.Hyperion" Version="1.3.11-beta" />
+    <PackageReference Include="Akka.Serialization.Hyperion" Version="1.4.5" />
   </ItemGroup>
   
 </Project>
