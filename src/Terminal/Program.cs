@@ -34,6 +34,12 @@ namespace Terminal
                         Console.WriteLine($"send RemoteRefActor.Create");
                         continue;
                     }
+                    if (input != null && input.StartsWith("ask"))
+                    {
+                        var result = terminal.Ask<string>(new RemoteRefActor.GetRandomNum()).Result;
+                        Console.WriteLine($"ask result:{result}");
+                        continue;
+                    }
                     terminal.Tell(new BinaryFunctionActor.Arguments
                     {
                         LeftArg = 10,
