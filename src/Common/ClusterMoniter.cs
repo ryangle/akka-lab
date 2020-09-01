@@ -1,6 +1,7 @@
 ﻿using System;
 using Akka.Actor;
 using Akka.Cluster;
+using Akka.Remote;
 
 namespace Common
 {
@@ -9,6 +10,29 @@ namespace Common
         protected Cluster Cluster = Akka.Cluster.Cluster.Get(Context.System);
         public ClusterMoniter()
         {
+            #region RemotingLifecycleEvent
+            Receive<RemotingListenEvent>(msg =>
+            {
+                ConsoleLog($"RemotingListenEvent", ConsoleColor.Green);
+            });
+            Receive<RemotingShutdownEvent>(msg =>
+            {
+                ConsoleLog($"RemotingShutdownEvent", ConsoleColor.Green);
+            });
+            Receive<RemotingErrorEvent>(msg =>
+            {
+                ConsoleLog($"RemotingErrorEvent", ConsoleColor.Green);
+            });
+            Receive<QuarantinedEvent>(msg =>
+            {
+                ConsoleLog($"QuarantinedEvent", ConsoleColor.Green);
+            });
+            Receive<ThisActorSystemQuarantinedEvent>(msg =>
+            {
+                ConsoleLog($"ThisActorSystemQuarantinedEvent", ConsoleColor.Green);
+            });
+            #endregion
+
             Receive<ClusterEvent.ClusterShuttingDown>(msg =>
             {
                 ConsoleLog($"ClusterShuttingDown");
@@ -27,31 +51,31 @@ namespace Common
             #region MemberStatusChange
             Receive<ClusterEvent.MemberExited>(msg =>
             {
-                ConsoleLog($"MemberExited,Member Address: {msg.Member.Address}");
+                ConsoleLog($"MemberExited,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberJoined>(msg =>
             {
-                ConsoleLog($"MemberJoined,Member Address: {msg.Member.Address}");
+                ConsoleLog($"MemberJoined,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberLeft>(msg =>
             {
-                ConsoleLog($"MemberLeft,Member Address:{msg.Member.Address}");
+                ConsoleLog($"MemberLeft,Member Address:{msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberRemoved>(msg =>
             {
-                ConsoleLog($"MemberRemoved,Member Address: {msg.Member.Address}");
+                ConsoleLog($"MemberRemoved,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberUp>(msg =>
             {
-                ConsoleLog($"MemberUp,Member Address:{msg.Member.Address}");
+                ConsoleLog($"MemberUp,Member Address:{msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberWeaklyUp>(msg =>
             {
-                ConsoleLog($"MemberWeaklyUp,Member Address: {msg.Member.Address}");
+                ConsoleLog($"MemberWeaklyUp,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberStatusChange>(msg =>
             {
-                ConsoleLog($"MemberStatusChange,Member Address: {msg.Member.Address}");
+                ConsoleLog($"MemberStatusChange,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             #endregion
 
@@ -71,10 +95,12 @@ namespace Common
         protected override void PreStart()
         {
             Cluster.Subscribe(Self, ClusterEvent.InitialStateAsEvents, new[] { typeof(ClusterEvent.IMemberEvent), typeof(ClusterEvent.IClusterDomainEvent) });
+
+            Context.System.EventStream.Subscribe(Self, typeof(RemotingLifecycleEvent));
         }
-        private void ConsoleLog(string msg)
+        private void ConsoleLog(string msg, ConsoleColor color = ConsoleColor.Cyan)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = color;
             Console.WriteLine(msg);
             Console.ResetColor();
         }
