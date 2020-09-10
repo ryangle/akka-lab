@@ -1,6 +1,7 @@
 ﻿using Akka.Actor;
 using Akka.Cluster;
 using Akka.DistributedData;
+using DataCommon;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -19,36 +20,22 @@ namespace Node2
                 var cluster = Cluster.Get(Context.System);
                 var replicator = DistributedData.Get(Context.System).Replicator;
 
-                var key = new ORSetKey<string>("keyA");
-                //var set = ORSet.Create(cluster.SelfUniqueAddress, s.ToString());
+                var key = new ORSetKey<User>("keyA");
                 var writeConsistency = new WriteTo(3, TimeSpan.FromSeconds(1));
-                //var dkey = new ORDictionaryKey<string, LWWRegister<string>>("keyB");
-                //var dd = ORDictionary<string, LWWRegister<string>>.Empty.SetItem(cluster, dkey, new LWWRegister<string>(cluster.SelfUniqueAddress, DateTime.Now.ToString()));
 
-                replicator.Tell(Dsl.Update(key, new ORSet<string>().Add(cluster.SelfUniqueAddress,s.ToString()), writeConsistency, old =>
-                 {
-                     if (s >= 3)
-                     {
-                         return old
-                         .Add(cluster.SelfUniqueAddress, s.ToString())
-                         .Remove(cluster.SelfUniqueAddress, (s - 3).ToString());
-                     }
-                     else
-                     {
-                         return old.Add(cluster.SelfUniqueAddress, s.ToString());
-                     }
-                    //if (count % 3 == 0 && count != 0)
-                    //{
-                    //    Console.WriteLine("remove "+count);
-                    //    return old.Remove(cluster.SelfUniqueAddress, (count - 3).ToString());
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("add "+count);
-                    //    return old.Add(cluster.SelfUniqueAddress, count.ToString());
-                    //}
-                }
-                ));
+                replicator.Tell(Dsl.Update(key, new ORSet<User>().Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() }), writeConsistency, old =>
+                {
+                    if (s >= 3)
+                    {
+                        return old
+                        .Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() })
+                        .Remove(cluster.SelfUniqueAddress, new User { Name = (s - 3).ToString() });
+                    }
+                    else
+                    {
+                        return old.Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() });
+                    }
+                }));
 
                 count++;
             });

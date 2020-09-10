@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.DistributedData;
+using DataCommon;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,14 +12,14 @@ namespace Node1
     {
         public ReadActor()
         {
+            ORSetKey<User> key = new ORSetKey<User>("keyA");
+            IActorRef replicator = DistributedData.Get(Context.System).Replicator;
             Receive<string>(msg =>
             {
-                var replicator = DistributedData.Get(Context.System).Replicator;
-                var key = new ORSetKey<string>("keyA");
-                var keyb = new ORDictionaryKey<string, LWWRegister<string>>("keyB");
-                var readConsistency = Dsl.ReadLocal;
+                
+                //var keyb = new ORDictionaryKey<string, LWWRegister<string>>("keyB");
 
-                var response = replicator.Ask<IGetResponse>(Dsl.Get(key, readConsistency)).Result;
+                var response = replicator.Ask<IGetResponse>(Dsl.Get(key, Dsl.ReadLocal)).Result;
                 if (response.IsSuccessful)
                 {
                     var data = response.Get(key);
@@ -26,7 +27,7 @@ namespace Node1
                     var es = data.Elements;
                     foreach (var item in es)
                     {
-                        Console.WriteLine($"read {es.Count} data {item} at {DateTime.Now}");
+                        Console.WriteLine($"read {es.Count} data {item.Name} at {DateTime.Now}");
                     }
                 }
                 else
