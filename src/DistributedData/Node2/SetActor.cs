@@ -12,12 +12,13 @@ namespace Node2
     class SetActor : ReceiveActor
     {
         public int count;
+
+        Cluster cluster = Cluster.Get(Context.System);
         public SetActor()
         {
-            Receive<string>(msg =>
+            Receive<ORSetTest>(msg =>
             {
                 var s = count;
-                var cluster = Cluster.Get(Context.System);
                 var replicator = DistributedData.Get(Context.System).Replicator;
 
                 var key = new ORSetKey<User>("keyA");
@@ -39,11 +40,97 @@ namespace Node2
 
                 count++;
             });
+
+            Receive<LWWDictionaryTest>(msg =>
+            {
+                try
+                {
+                    var cluster = Cluster.Get(Context.System);
+                    var replicator = DistributedData.Get(Context.System).Replicator;
+
+                    var key = new LWWDictionaryKey<string, User>("keyB");
+
+                    var writeConsistency = new WriteTo(3, TimeSpan.FromSeconds(1));
+
+                    var initial = LWWDictionary<string, User>.Empty;
+                    replicator.Tell(Dsl.Update(key, initial, writeConsistency, old =>
+                    {
+                        //var m = old.Merge(initial);
+                        var m = old.SetItem(cluster.SelfUniqueAddress, count.ToString(), new User { Name = count.ToString() });
+                        if (count > 3)
+                        {
+                            m = m.Remove(cluster.SelfUniqueAddress, (count - 1).ToString());
+                            m = old.SetItem(cluster.SelfUniqueAddress, "3", new User { Name = count.ToString() });
+
+                        }
+                        return m;
+                        //return old;
+                    }));
+                    count++;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"LWWDictionaryData error:{ex.Message}");
+                }
+
+            });
+
+            Receive<ORDictionaryTest>(msg =>
+            {
+                try
+                {
+                    //var cluster = Cluster.Get(Context.System);
+                    //var replicator = DistributedData.Get(Context.System).Replicator;
+
+                    //var key = new ORDictionaryKey<string,ORSet<User>>("keyC");
+
+                    //var writeConsistency = new WriteTo(3, TimeSpan.FromSeconds(1));
+
+                    //var set =ORSet.Empty.
+                    //var initial = ORDictionary.Create(cluster.SelfUniqueAddress, count.ToString(), new User { Name = count.ToString() });
+                    //replicator.Tell(Dsl.Update(key, initial, writeConsistency, old =>
+                    //{
+                    //    return initial;
+                    //    //return old;
+                    //}));
+                    //count++;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"LWWDictionaryData error:{ex.Message}");
+                }
+
+            });
+
+            Receive<LWWRegisterTest>(msg =>
+            {
+                try
+                {
+                    var cluster = Cluster.Get(Context.System);
+                    var replicator = DistributedData.Get(Context.System).Replicator;
+
+                    var key = new LWWRegisterKey<User>("keyLWWResigter");
+
+                    var writeConsistency = new WriteTo(3, TimeSpan.FromSeconds(1));
+
+                    var initial = new LWWRegister<User>(cluster.SelfUniqueAddress, new User());
+                    replicator.Tell(Dsl.Update(key, initial, writeConsistency, old =>
+                    {
+                        return new LWWRegister<User>(cluster.SelfUniqueAddress, new User { Name = count.ToString() });
+                    }));
+                    count++;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"LWWRegisterTest error:{ex.Message}");
+                }
+            });
         }
         protected override void PreStart()
         {
-            Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), Self, count.ToString(), Self);
-            //Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(1), Self, "ok", Self);
+            //Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), Self, new LWWDictionaryTest(), Self);
+            //Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(1), Self, new ORSetTest(), Self);
+            Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), Self, new LWWRegisterTest(), Self);
         }
     }
 }
