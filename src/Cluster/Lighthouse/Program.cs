@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using Common;
 using Akka.Actor;
+using Akka.Cluster;
 
 namespace Lighthouse
 {
@@ -20,13 +21,19 @@ namespace Lighthouse
             }
             var actorSystem = ActorSystemFactory.Create(port);
 
-            actorSystem.ActorOf<ClusterMoniter>();
+            
+
+            Cluster.Get(actorSystem).RegisterOnMemberUp(() =>
+            {
+                Console.WriteLine($"RegisterOnMemberUp,{Cluster.Get(actorSystem).SelfAddress}");
+                actorSystem.ActorOf<ClusterMoniter>();
+            });
 
             //var deadletterWatchMonitorProps = Props.Create(() => new ActorSystemMonitor());
             //var deadletterWatchActorRef = actorsystem.ActorOf(deadletterWatchMonitorProps);
             //actorsystem.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
-
-            _manualResetEventSlim.Wait();
+            actorSystem.WhenTerminated.Wait();
+            //_manualResetEventSlim.Wait();
         }
     }
 }

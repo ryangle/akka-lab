@@ -22,11 +22,11 @@ namespace Common
             });
             Receive<RemotingErrorEvent>(msg =>
             {
-                ConsoleLog($"RemotingErrorEvent", ConsoleColor.Green);
+                ConsoleLog($"RemotingErrorEvent {msg.Cause}", ConsoleColor.Green);
             });
             Receive<QuarantinedEvent>(msg =>
             {
-                ConsoleLog($"QuarantinedEvent", ConsoleColor.Green);
+                ConsoleLog($"QuarantinedEvent {msg.Address}", ConsoleColor.Green);
             });
             Receive<ThisActorSystemQuarantinedEvent>(msg =>
             {
@@ -36,7 +36,7 @@ namespace Common
 
             Receive<ClusterEvent.ClusterShuttingDown>(msg =>
             {
-                ConsoleLog($"ClusterShuttingDown");
+                ConsoleLog($"ClusterShuttingDown {ClusterEvent.ClusterShuttingDown.Instance}");
             });
 
             Receive<ClusterEvent.CurrentClusterState>(msg =>
@@ -52,43 +52,43 @@ namespace Common
             #region MemberStatusChange
             Receive<ClusterEvent.MemberExited>(msg =>
             {
-                ConsoleLog($"MemberExited,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberExited,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkRed);
             });
             Receive<ClusterEvent.MemberJoined>(msg =>
             {
-                ConsoleLog($"MemberJoined,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberJoined,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkGreen);
             });
             Receive<ClusterEvent.MemberLeft>(msg =>
             {
-                ConsoleLog($"MemberLeft,Member Address:{msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(", ")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberLeft,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address:{msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.Red);
             });
             Receive<ClusterEvent.MemberRemoved>(msg =>
             {
-                ConsoleLog($"MemberRemoved,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberRemoved,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address: {msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.Yellow);
             });
             Receive<ClusterEvent.MemberUp>(msg =>
             {
-                ConsoleLog($"MemberUp,Member Address:{msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberUp,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address:{msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.Green);
             });
             Receive<ClusterEvent.MemberWeaklyUp>(msg =>
             {
-                ConsoleLog($"MemberWeaklyUp,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberWeaklyUp,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.Black);
             });
             Receive<ClusterEvent.MemberStatusChange>(msg =>
             {
-                ConsoleLog($"MemberStatusChange,Member Address: {msg.Member.Address},{msg.Member.UniqueAddress},Roles:{msg.Member.Roles.Join(",")}", ConsoleColor.DarkRed);
+                ConsoleLog($"MemberStatusChange,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address: {msg.Member.Address},{msg.Member.UniqueAddress}", ConsoleColor.DarkBlue);
             });
             #endregion
 
             #region ReachabilityEvent
             Receive<ClusterEvent.UnreachableMember>(msg =>
             {
-                Cluster.Down(msg.Member.Address);
-                ConsoleLog($"UnreachableMember,Member Address:{msg.Member.Address}");
+                //Cluster.Down(msg.Member.Address);
+                ConsoleLog($"UnreachableMember,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address:{msg.Member.Address}");
             });
             Receive<ClusterEvent.ReachabilityEvent>(msg =>
             {
-                ConsoleLog($"ReachabilityEvent,Member Address:{msg.Member.Address}");
+                ConsoleLog($"ReachabilityEvent,Roles:{msg.Member.Roles.Join(",")},Status:{msg.Member.Status},Member Address:{msg.Member.Address}");
             });
             #endregion
 
