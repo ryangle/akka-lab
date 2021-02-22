@@ -15,7 +15,7 @@ namespace Node1
             ORSetKey<User> key = new ORSetKey<User>("keyA");
             LWWDictionaryKey<string, User> keyB = new LWWDictionaryKey<string, User>("keyB");
             IActorRef replicator = DistributedData.Get(Context.System).Replicator;
-            Receive<string>(msg =>
+            Receive<ORSetTest>(msg =>
             {
 
                 //var keyb = new ORDictionaryKey<string, LWWRegister<string>>("keyB");
@@ -26,10 +26,12 @@ namespace Node1
                     var data = response.Get(key);
                     //Console.WriteLine($"read {data.Count}");
                     var es = data.Elements;
+                    var name = string.Empty;
                     foreach (var item in es)
                     {
-                        Console.WriteLine($"read {es.Count} data {item.Name} at {DateTime.Now}");
+                        name += item.Name + ",";
                     }
+                    Console.WriteLine($"read {es.Count} data {name} at {DateTime.Now}");
                 }
                 else
                 {
@@ -83,7 +85,8 @@ namespace Node1
         }
         protected override void PreStart()
         {
-            Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), Self, new LWWRegisterTest(), Self);
+            Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), Self, new ORSetTest(), Self);
+            //Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), Self, new LWWRegisterTest(), Self);
             //Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), Self, new LWWDictionaryTest(), Self);
         }
     }

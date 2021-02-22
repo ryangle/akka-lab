@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace FaultToleranceTest
 {
@@ -19,11 +20,17 @@ namespace FaultToleranceTest
             });
             Receive<string>(msg =>
             {
+                Console.WriteLine($"Sender is Nodody:{Sender.IsNobody()}");
                 Console.WriteLine($"Receive {msg}");
                 if (msg == "exception")
                 {
-                    throw new Exception("super exception");
+                    //throw new Exception("super exception");
                 }
+            });
+            Receive<TestException>(msg =>
+            {
+                Console.WriteLine($"Receive {msg.Message}");
+                throw new Exception("super exception");
             });
         }
         public override void AroundPostRestart(Exception cause, object message)
@@ -63,7 +70,7 @@ namespace FaultToleranceTest
         }
         protected override void PreRestart(Exception reason, object message)
         {
-            Console.WriteLine("PreRestart");
+            Console.WriteLine($"PreRestart,reason:{reason.Message},messageType:{message.GetType()},message:{JsonConvert.SerializeObject(message)}");
             base.PreRestart(reason, message);
         }
         protected override void PreStart()

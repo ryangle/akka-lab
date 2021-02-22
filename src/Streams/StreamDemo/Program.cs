@@ -29,6 +29,7 @@ namespace StreamDemo
                         .Select(num => ByteString.FromString($"{num}\n"))
                         .RunWith(FileIO.ToFile(new FileInfo("factorials.txt")), materializer);
             }
+            Console.WriteLine("Finished!");
             Console.ReadLine();
         }
         public static Sink<string, Task<IOResult>> LineSink(string filename)

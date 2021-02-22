@@ -26,39 +26,39 @@ namespace Node1
             //.WithFallback(ConfigurationFactory.ParseString("akka.log-config-on-start=on"))
             //.WithFallback(ConfigurationFactory.ParseString("akka.loggers=[\"Akka.Logger.log4net.Log4NetLogger, Akka.Logger.log4net\"]"));
             System = ActorSystem.Create("TestCluster", config);
-            //System.ActorOf<ReadActor>();
-            Task.Factory.StartNew(() =>
-            {
+            System.ActorOf<ReadActor>();
+            //Task.Factory.StartNew(() =>
+            //{
 
-                try
-                {
-                    var replicator = DistributedData.Get(System).Replicator;
+            //    try
+            //    {
+            //        var replicator = DistributedData.Get(System).Replicator;
 
-                    var key = new LWWRegisterKey<User>("keyLWWResigter");
-                    while (true)
-                    {
-                        var response = replicator.Ask<IGetResponse>(Dsl.Get(key, Dsl.ReadLocal)).Result;
-                        if (response.IsSuccessful)
-                        {
-                            var data = response.Get(key);
-                            //Console.WriteLine($"read {data.Count}");
+            //        var key = new LWWRegisterKey<User>("keyLWWResigter");
+            //        while (true)
+            //        {
+            //            var response = replicator.Ask<IGetResponse>(Dsl.Get(key, Dsl.ReadLocal)).Result;
+            //            if (response.IsSuccessful)
+            //            {
+            //                var data = response.Get(key);
+            //                //Console.WriteLine($"read {data.Count}");
 
-                            Console.WriteLine($"IsSuccessful  data {data.Value.Name} at {DateTime.Now}");
+            //                Console.WriteLine($"IsSuccessful  data {data.Value.Name} at {DateTime.Now}");
 
-                        }
-                        else
-                        {
-                            Console.WriteLine($"read {response.ToString()} at {DateTime.Now}");
-                        }
-                        Task.Delay(1000).Wait();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"LWWRegisterTest error:{ex.Message}");
-                }
+            //            }
+            //            else
+            //            {
+            //                Console.WriteLine($"read {response.ToString()} at {DateTime.Now}");
+            //            }
+            //            Task.Delay(1000).Wait();
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"LWWRegisterTest error:{ex.Message}");
+            //    }
 
-            });
+            //});
 
             Console.ReadLine();
         }

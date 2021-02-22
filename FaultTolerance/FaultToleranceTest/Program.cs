@@ -12,8 +12,8 @@ namespace FaultToleranceTest
             {
                 var supervisor = system.ActorOf<Supervisor>();
 
-                supervisor.Tell("exception");
-
+                //supervisor.Ask<string>("exception");
+                supervisor.Tell(new TestException { Message = "dddd"});
                 Console.ReadLine();
                 supervisor.Tell("xxx");
                 Console.ReadLine();

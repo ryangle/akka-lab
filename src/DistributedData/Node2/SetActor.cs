@@ -22,9 +22,10 @@ namespace Node2
                 var replicator = DistributedData.Get(Context.System).Replicator;
 
                 var key = new ORSetKey<User>("keyA");
-                var writeConsistency = new WriteTo(3, TimeSpan.FromSeconds(1));
-
-                replicator.Tell(Dsl.Update(key, new ORSet<User>().Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() }), writeConsistency, old =>
+                var writeConsistency = new WriteTo(2, TimeSpan.FromSeconds(1));
+                var write = new WriteMajority(TimeSpan.FromSeconds(1));
+                Console.WriteLine($"ORSetTest {s}");
+                replicator.Tell(Dsl.Update(key, ORSet<User>.Empty, WriteLocal.Instance, old =>
                 {
                     if (s >= 3)
                     {
@@ -129,8 +130,8 @@ namespace Node2
         protected override void PreStart()
         {
             //Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), Self, new LWWDictionaryTest(), Self);
-            //Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(1), Self, new ORSetTest(), Self);
-            Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), Self, new LWWRegisterTest(), Self);
+            Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(1), Self, new ORSetTest(), Self);
+            //Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2), Self, new LWWRegisterTest(), Self);
         }
     }
 }
