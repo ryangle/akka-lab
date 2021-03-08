@@ -65,8 +65,9 @@ namespace Terminal
         {
             Console.WriteLine($"CreatSystem");
             ActorSystem = ActorSystemFactory.Create("");
+            ActorSystem.ActorOf<TerminalActor>("terminal");
             var cluster = Cluster.Get(ActorSystem);
-            cluster.RegisterOnMemberUp(MemberUp);
+            //cluster.RegisterOnMemberUp(MemberUp);
             cluster.RegisterOnMemberRemoved(() => MemberRemoved());
         }
         private static void MemberUp()

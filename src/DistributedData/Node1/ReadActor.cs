@@ -15,12 +15,13 @@ namespace Node1
             ORSetKey<User> key = new ORSetKey<User>("keyA");
             LWWDictionaryKey<string, User> keyB = new LWWDictionaryKey<string, User>("keyB");
             IActorRef replicator = DistributedData.Get(Context.System).Replicator;
+            IActorRef ddataActor = Context.ActorOf<DDataActor>();
             Receive<ORSetTest>(msg =>
             {
 
                 //var keyb = new ORDictionaryKey<string, LWWRegister<string>>("keyB");
 
-                var response = replicator.Ask<IGetResponse>(Dsl.Get(key, Dsl.ReadLocal)).Result;
+                var response = ddataActor.Ask<IGetResponse>(Dsl.Get(key, Dsl.ReadLocal)).Result;
                 if (response.IsSuccessful)
                 {
                     var data = response.Get(key);

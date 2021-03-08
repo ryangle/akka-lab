@@ -30,6 +30,10 @@ namespace Terminal
             {
                 serviceEntry.Tell(new RemoteRefActor.RandomNumReq(Sender));
             });
+            Receive<string>(msg =>
+            {
+                Console.WriteLine($"Receive msg:{msg}");
+            });
         }
     }
 }

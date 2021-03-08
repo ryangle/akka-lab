@@ -21,14 +21,18 @@ namespace SeedNode1
             }
             var actorSystem = ActorSystemFactory.Create(port);
 
-            actorSystem.ActorOf<ServiceActor>("serviceEntry");
             actorSystem.ActorOf<ClusterMoniter>();
             Console.WriteLine("Service Node 1 wait");
             var cluster = Cluster.Get(actorSystem);
             cluster.RegisterOnMemberRemoved(() => MemberRemoved(actorSystem));
             //_manualResetEventSlim.Wait();
             Console.ReadLine();
-
+            Console.WriteLine("Start ServiceActor");
+            actorSystem.ActorOf<ServiceActor>("serviceEntry");
+            Console.ReadLine();
+            Console.WriteLine("actorSystem.Terminate()");
+            actorSystem.Terminate();
+            Console.ReadLine();
             Console.WriteLine("Service Node 1 leave");
             //var cluster = Cluster.Get(actorSystem);
             //cluster.RegisterOnMemberRemoved(() => MemberRemoved(actorSystem));
