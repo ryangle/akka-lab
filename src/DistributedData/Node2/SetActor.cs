@@ -5,6 +5,7 @@ using DataCommon;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 
 namespace Node2
@@ -25,19 +26,48 @@ namespace Node2
                 var key = new ORSetKey<User>("keyA");
                 var writeConsistency = new WriteTo(2, TimeSpan.FromSeconds(1));
                 var write = new WriteMajority(TimeSpan.FromSeconds(1));
-                Console.WriteLine($"ORSetTest {s}");
+                Console.WriteLine($"ORSetTest s:{s}");
                 ddataActor.Tell(Dsl.Update(key, ORSet<User>.Empty, WriteLocal.Instance, old =>
                 {
-                    if (s >= 3)
+                    if (s == 0)
                     {
-                        return old
-                        .Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() })
-                        .Remove(cluster.SelfUniqueAddress, new User { Name = (s - 3).ToString() });
+                        Console.WriteLine($"0 old count:{old.Count}");
+                        return old;
                     }
-                    else
+                    else if (s == 1)
                     {
-                        return old.Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() });
+                        Console.WriteLine($"1 old count:{old.Count}");
+
+                        return old.Add(cluster, new User { Name = s.ToString(), Count = s.ToString() });
                     }
+                    else if (s > 1)
+                    {
+                        var u = old.FirstOrDefault();
+                        if (u != null)
+                        {
+                            u.Count = s.ToString();
+                            Console.WriteLine($"1>old name:{u.Name},count:{old.Count}");
+
+                            //return old.Add(cluster, u);
+                            //return old.Remove(cluster, u).Add(cluster, u);
+                            return old;
+                        }
+
+
+                    }
+                    Console.WriteLine($"end old count:{old.Count}");
+
+                    return old;
+                    //if (s >= 3)
+                    //{
+                    //    return old
+                    //    .Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() })
+                    //    .Remove(cluster.SelfUniqueAddress, new User { Name = (s - 3).ToString() });
+                    //}
+                    //else
+                    //{
+                    //    return old.Add(cluster.SelfUniqueAddress, new User { Name = s.ToString() });
+                    //}
                 }));
 
                 count++;

@@ -47,10 +47,17 @@ namespace SeedNode1
                 Console.WriteLine($"Receive RemoteRefActor.RandomNumReq from {msg.Responder}");
                 msg.Responder.Tell("1111");
             });
-
+            Receive<GenericMsg<string>>(msg =>
+            {
+                Console.WriteLine($"receive GenericMsg string {msg.Data}");
+            });
+            Receive<GenericMsg<int>>(msg =>
+            {
+                Console.WriteLine($"receive GenericMsg int {msg.Data}");
+            });
             Receive<string>(msg =>
             {
-                throw new Exception(msg);
+                Console.WriteLine($"receive string {msg}");
             });
         }
         protected override void PreStart()

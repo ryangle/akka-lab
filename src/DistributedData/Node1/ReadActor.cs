@@ -28,11 +28,13 @@ namespace Node1
                     //Console.WriteLine($"read {data.Count}");
                     var es = data.Elements;
                     var name = string.Empty;
+                    var counts = string.Empty;
                     foreach (var item in es)
                     {
                         name += item.Name + ",";
+                        counts += item.Count + ",";
                     }
-                    Console.WriteLine($"read {es.Count} data {name} at {DateTime.Now}");
+                    Console.WriteLine($"read {es.Count} data name:{name},count:{counts} at {DateTime.Now}");
                 }
                 else
                 {

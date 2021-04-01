@@ -26,9 +26,13 @@ namespace SeedNode1
             var cluster = Cluster.Get(actorSystem);
             cluster.RegisterOnMemberRemoved(() => MemberRemoved(actorSystem));
             //_manualResetEventSlim.Wait();
-            Console.ReadLine();
+            //Console.ReadLine();
             Console.WriteLine("Start ServiceActor");
-            actorSystem.ActorOf<ServiceActor>("serviceEntry");
+            var serviceactor = actorSystem.ActorOf<ServiceActor>("serviceEntry");
+            //Console.ReadLine();
+            //serviceactor.Tell(new GenericMsg<string> { Data="dddd"});
+            //Console.ReadLine();
+            //serviceactor.Tell(new GenericMsg<int> { Data = 12 });
             Console.ReadLine();
             Console.WriteLine("actorSystem.Terminate()");
             actorSystem.Terminate();

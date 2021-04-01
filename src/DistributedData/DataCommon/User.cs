@@ -6,6 +6,7 @@ namespace DataCommon
     {
         public string Name { get; set; }
         public string Id { get; set; }
+        public string Count { get; set; }
         public override int GetHashCode()
         {
             return (Name + Id).GetHashCode();
